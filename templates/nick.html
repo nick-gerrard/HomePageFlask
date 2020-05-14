@@ -1,0 +1,26 @@
+{% extends "new_layout.html" %}
+{% block content %}
+    <div class="jumbotron text-center align-self-center bg-secondary pagination-centered">
+        <h1 class="text-dark">Current temperature in Arlington is <a class="text-dark" href="{{ weather_url }}" target = "_blank">{{ temp }}</a></h1>
+        <div>
+            {% for link in links %}
+            <a href="{{ links[link] }}" target=_blank class="btn btn-lg btn-secondary text-dark">{{ link }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container">
+        <div class="align-center">
+            <row>
+                <h2 class="text-light text-center">From the New York Times:</h2>
+            </row>
+            <row>
+            <ul class="list-group">
+                {% for story in trending_stories %}
+                <li class="list-group-item text-dark bg-secondary"><a href="{{ story[0] }}" target=_blank class="btn btn-md btn-block btn-secondary text-dark">{{ story[1] }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            </row>
+        </div>
+    </div>
+ {% endblock content %}
