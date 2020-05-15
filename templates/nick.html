@@ -1,10 +1,17 @@
 {% extends "new_layout.html" %}
 {% block content %}
-    <div class="jumbotron text-center align-self-center bg-light pagination-centered">
-        <h1 class="text-dark">Current temperature in Arlington is <a class="text-dark" href="{{ weather_url }}" target = "_blank">{{ temp }}</a></h1>
+    <div class="jumbotron text-center align-self-center bg-light pagination-centered text-dark">
+        <h1 class="text-dark"><a class="text-dark" href="{{ weather_url }}" target="_blank">Weather</a> in Arlington</h1>
+        <p>Temperature: {{ weatherdata["temp"] }}&#176;</p>
+        <p>Feels Like: {{ weatherdata["feels_like"] }}&#176;</p>
+        <p>High: {{ weatherdata["temp_max"] }}&#176;</p>
+        <p>Low: {{ weatherdata["temp_min"] }}&#176;</p>
+        <p>Conditions: {{ weatherdata["description"] }}</p>
+
+        <a class="text-dark" href="{{ weather_url }}" target = "_blank">{{ temp }}</a>
         <div>
             {% for link in links %}
-            <a href="{{ links[link] }}" target=_blank class="btn btn-lg btn-secondary text-dark m-1">{{ link }}</a>
+            <a href="{{ links[link] }}" target=_blank class="btn btn-lg btn-secondary text-light m-1">{{ link }}</a>
             {% endfor %}
         </div>
     </div>
@@ -16,7 +23,7 @@
             <row>
             <ul class="list-group border border-light">
                 {% for story in trending_stories %}
-                <li class="list-group-item text-dark bg-light border-light"><a href="{{ story[0] }}" target=_blank class="btn btn-md btn-block btn-secondary text-dark">{{ story[1] }}</a>
+                <li class="list-group-item text-dark bg-light border-light"><a href="{{ story[0] }}" target=_blank class="btn btn-md btn-block btn-secondary text-light">{{ story[1] }}</a>
                 </li>
                 {% endfor %}
             </ul>
