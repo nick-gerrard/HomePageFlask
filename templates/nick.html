@@ -1,10 +1,10 @@
 {% extends "new_layout.html" %}
 {% block content %}
-    <div class="jumbotron text-center align-self-center bg-secondary pagination-centered">
+    <div class="jumbotron text-center align-self-center bg-light pagination-centered">
         <h1 class="text-dark">Current temperature in Arlington is <a class="text-dark" href="{{ weather_url }}" target = "_blank">{{ temp }}</a></h1>
         <div>
             {% for link in links %}
-            <a href="{{ links[link] }}" target=_blank class="btn btn-lg btn-secondary text-dark">{{ link }}</a>
+            <a href="{{ links[link] }}" target=_blank class="btn btn-lg btn-secondary text-dark m-1">{{ link }}</a>
             {% endfor %}
         </div>
     </div>
@@ -14,9 +14,9 @@
                 <h2 class="text-dark text-center">From the New York Times:</h2>
             </row>
             <row>
-            <ul class="list-group">
+            <ul class="list-group border border-light">
                 {% for story in trending_stories %}
-                <li class="list-group-item text-dark bg-secondary"><a href="{{ story[0] }}" target=_blank class="btn btn-md btn-block btn-dark text-secondary">{{ story[1] }}</a>
+                <li class="list-group-item text-dark bg-light border-light"><a href="{{ story[0] }}" target=_blank class="btn btn-md btn-block btn-secondary text-dark">{{ story[1] }}</a>
                 </li>
                 {% endfor %}
             </ul>

@@ -1,9 +1,11 @@
+import os
 from flask import Flask, Response, render_template, url_for
 import requests
 import datetime
 import lxml
 from bs4 import BeautifulSoup
 import time
+import json
 
 news_url = "https://www.nytimes.com/sitemaps/new/news.xml.gz"
 weather_url = "https://patch.com/virginia/arlington-va/weather"
@@ -14,7 +16,11 @@ links = {"Gmail": "https://www.mail.google.com",
     "Hulu" : "https://www.hulu.com"
 }
 
-
+def get_links(file):
+    f = open(file)
+    data = json.load(f)
+    f.close()
+    return data
 
 def greeting(name):
     full_time = datetime.datetime.now() - datetime.timedelta(hours=4)
@@ -58,6 +64,8 @@ app = Flask(__name__)
 @app.route("/nick")
 def nick():
     name = "Nick"
+    path_to_links = os.getcwd() + "/static/nick_links.json"
+    links = get_links(path_to_links)
     unadjusted_time = datetime.datetime.now()
     adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
     open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
