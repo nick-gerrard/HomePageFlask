@@ -1,19 +1,30 @@
 {% extends "new_layout.html" %}
 {% block content %}
-    <div class="jumbotron text-center align-self-center bg-light pagination-centered text-dark">
-        <h1 class="text-dark"><a class="text-dark" href="{{ weather_url }}" target="_blank">Weather</a> in Arlington</h1>
-        <p>Temperature: {{ weatherdata["temp"] }}&#176;</p>
-        <p>Feels Like: {{ weatherdata["feels_like"] }}&#176;</p>
-        <p>High: {{ weatherdata["temp_max"] }}&#176;</p>
-        <p>Low: {{ weatherdata["temp_min"] }}&#176;</p>
-        <p>Conditions: {{ weatherdata["description"] }}</p>
-
-        <a class="text-dark" href="{{ weather_url }}" target = "_blank">{{ temp }}</a>
-        <div>
-            {% for link in links %}
-            <a href="{{ links[link] }}" target=_blank class="btn btn-lg btn-secondary text-light m-1">{{ link }}</a>
-            {% endfor %}
-        </div>
+    <div class="jumbotron text-center align-self-center bg-light text-dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card" class="align-center">
+                        <div class="card-header">
+                            <h1 class="text-dark"><a class="text-dark" href="{{ weather_url }}" target="_blank">Weather</a> in Arlington</h1>
+                        </div>
+                        <div class="card-body">
+                            <p>Temperature: {{ weatherdata["temp"] }}&#176;</p>
+                            <p>Feels Like: {{ weatherdata["feels_like"] }}&#176;</p>
+                            <p>High: {{ weatherdata["temp_max"] }}&#176;</p>
+                            <p>Low: {{ weatherdata["temp_min"] }}&#176;</p>
+                            <p>Conditions: {{ weatherdata["description"] }}</p>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-md-4 align-center">
+                    {% for link in links %}
+                    <a href="{{ links[link] }}" target=_blank class="btn btn-lg btn-secondary text-light m-1">{{ link }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>        
     </div>
     <div class="container">
         <div class="align-center">
