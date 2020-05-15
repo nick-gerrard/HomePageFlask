@@ -17,7 +17,8 @@ links = {"Gmail": "https://www.mail.google.com",
 
 
 def greeting(name):
-    hour = datetime.datetime.now().hour
+    full_time = datetime.datetime.now() - datetime.timedelta(hours=4)
+    hour = full_time.hour
     if hour < 12:
         greet = "Good Morning, " + name
         return greet
@@ -31,8 +32,12 @@ def greeting(name):
 def get_temp(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.content, "html.parser")
-    div = soup.find("div", {"class": "weather-current-temp temperature above-48 inline-block"})
-    current_temp = div.text
+    try:
+        div = soup.find("div", {"class": "weather-current-temp temperature above-48 inline-block"})
+        current_temp = div.text
+    except:
+        div = soup.find("div", {"class": "weather-current-temp temperature above-62 inline-block"})
+        current_temp = div.text
     # There's room in here to find quite a bit more data, like conditions, future temps, etc.
     return current_temp
 
@@ -53,7 +58,9 @@ app = Flask(__name__)
 @app.route("/nick")
 def nick():
     name = "Nick"
-    open_time = datetime.datetime.now().strftime("%Y.%m.%d|%H:%M:%S")
+    unadjusted_time = datetime.datetime.now()
+    adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
+    open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
     trending_stories = get_trending(news_url)
     greeting_type = greeting(name)
     temp = get_temp(weather_url)

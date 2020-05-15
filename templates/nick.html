@@ -11,12 +11,12 @@
     <div class="container">
         <div class="align-center">
             <row>
-                <h2 class="text-light text-center">From the New York Times:</h2>
+                <h2 class="text-dark text-center">From the New York Times:</h2>
             </row>
             <row>
             <ul class="list-group">
                 {% for story in trending_stories %}
-                <li class="list-group-item text-dark bg-secondary"><a href="{{ story[0] }}" target=_blank class="btn btn-md btn-block btn-secondary text-dark">{{ story[1] }}</a>
+                <li class="list-group-item text-dark bg-secondary"><a href="{{ story[0] }}" target=_blank class="btn btn-md btn-block btn-dark text-secondary">{{ story[1] }}</a>
                 </li>
                 {% endfor %}
             </ul>
