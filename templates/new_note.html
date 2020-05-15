@@ -1,0 +1,20 @@
+{% extends "new_layout.html" %}
+{% block content %}
+    <div class="container">
+        <form class="m-1">
+            <row class="">
+                <div class="form-group">
+                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Note Title Here">
+                </div>
+            </row>
+            <row class="">
+                <div class="form-group">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="20" placeholder="Your Note Here!"></textarea>
+                </div>
+            </row>
+            <row>
+                <button type="submit" class="btn btn-secondary mb-2">Save Note</button>
+            </row>
+        </form>
+    </div>
+ {% endblock content %}

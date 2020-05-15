@@ -34,8 +34,6 @@ def greeting(name):
         greet = "Good Evening, " + name
         return greet
 
-
-
     
 def get_trending(news_url):
     trending = []
@@ -46,6 +44,9 @@ def get_trending(news_url):
         trending.append((url.find("loc").get_text(), url.find("news:title").get_text()))
     return trending
 
+def interactive_function():
+    name = input("What's your name? ")
+    return f"Hello, {name}, I'm a server!"
 
 app = Flask(__name__)
 
@@ -69,6 +70,16 @@ def nick():
 def time_feed():
     def generate():
         while True:
-            yield datetime.datetime.now().strftime("%Y.%m.%d|%H:%M:%S")
+            #realtime = datetime.datetime.now() - datetime.timedelta(hours=4)
+            yield datetime.datetime.now().strftime("%Y.%m.%d|%H:%M:S")
             time.sleep(1)
-    return Response(generate())
+    return Response(generate(), mimetype='text')
+
+@app.route('/new_note')
+def new_note():
+    name = "Nick"
+    greeting_type = greeting(name)
+    unadjusted_time = datetime.datetime.now()
+    adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
+    open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
+    return render_template("new_note.html", greeting=greeting_type, open_time=open_time, title="New Note")
