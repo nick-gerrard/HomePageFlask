@@ -1,4 +1,5 @@
 import os
+from random import randint
 from flask import Flask, Response, render_template, url_for, redirect, flash, request
 from forms import RegistrationForm, LoginForm
 import requests
@@ -38,6 +39,15 @@ def greeting(name):
     else:
         greet = "Good Evening, " + str(name)
         return greet
+
+def generate_quote(quote_json):
+    quote_list = get_json_data(quote_json)["quotes"]
+    num = randint(0, len(quote_list) - 1)
+    quote = quote_list[num]["quote"]
+    author = quote_list[num]["author"]
+    return (quote, author)
+    
+
 
 
 app = Flask(__name__)
@@ -79,21 +89,23 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+    quote_tuple = generate_quote(os.getcwd() + "/static/quotes.json")
     if form.validate_on_submit():
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('home'))
-    return render_template('register.html', title="Register", form=form)
+    return render_template('register.html', title="Register", form=form, quote_tuple=quote_tuple)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    quote_tuple = generate_quote(os.getcwd() + "/static/quotes.json")
     if form.validate_on_submit():
         if form.email.data == "nick" and form.password.data == "pass":
             flash('Login Successful!', 'success')
             return redirect(url_for('home'))
         else:
             flash('Login Failed. Check password/email!', 'danger')
-    return render_template('login.html', title="Login", form=form)
+    return render_template('login.html', title="Login", form=form, quote_tuple=quote_tuple)
 
 @app.route('/news')
 def news():
