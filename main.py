@@ -43,8 +43,8 @@ app = Flask(__name__)
 
 
 @app.route("/")
-@app.route("/nick")
-def nick():
+@app.route("/home")
+def home():
     # Name and Greeting
     name = "nick"
     greeting_type = greeting(name.title())
@@ -54,8 +54,8 @@ def nick():
     links = get_json_data(path_to_links)
 
     # Fav Icons (beta)
-    path_to_favicons = os.getcwd() + "/static/users/" + name + "/favicons.json"
-    favicons = get_json_data(path_to_favicons)
+    """ path_to_favicons = os.getcwd() + "/static/users/" + name + "/favicons.json"
+    favicons = get_json_data(path_to_favicons) """
 
     # Notes
     path_to_notes = os.getcwd() + "/static/users/" + name + "/notes.json"
@@ -71,13 +71,30 @@ def nick():
     weatherdata = get_weather()
 
     return render_template('nick.html', weatherdata=weatherdata, links=links, greeting=greeting_type, 
-                            trending_stories=trending_stories, open_time=open_time, weather_url = weather_url, notes=notes, favicons=favicons)
+                            trending_stories=trending_stories, open_time=open_time, 
+                            weather_url = weather_url, notes=notes)
+
+@app.route('/news')
+def news():
+    name = "nick"
+    greeting_type = greeting(name.title())
+
+    unadjusted_time = datetime.datetime.now()
+    adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
+    open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
+
+    trending_stories = get_news()[0:20]
+    return render_template('news.html', title="News", trending_stories=trending_stories, 
+                            open_time=open_time, greeting=greeting_type)
+
 
 @app.route('/new_note')
 def new_note():
     name = "nick"
     greeting_type = greeting(name.title())
+
     unadjusted_time = datetime.datetime.now()
     adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
     open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
-    return render_template("new_note.html", greeting=greeting_type, open_time=open_time, title="New Note")
+    return render_template("new_note.html", greeting=greeting_type, open_time=open_time, 
+                            title="New Note")

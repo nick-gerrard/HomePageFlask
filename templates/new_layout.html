@@ -16,6 +16,21 @@
         {% endif %}
     </title>  </head>
   <body class="bg-dark">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{{ url_for('news') }}">News</a>
+            <a class="nav-item nav-link" href="#">Notes</a>
+              <a class="nav-item nav-link" href="#">Login</a>
+          </div>
+        </div>
+      </nav>
+    </div>
     <div class="container bg-light text-monospace">
         <h1 class="text-dark text-center pagination-centered">{{ greeting }}</h1>
         <p class="text-secondary-50 text-center">Page opened at {{ open_time }}</p>

@@ -10,13 +10,16 @@ def get_stories(url):
     x = r.json()
     y = x["results"]
     for value in y:
-        temp_dict = {
-            "title": value["title"],
-            "abstract": value["abstract"],
-            "url": value["url"],
-            "picture_url": value["multimedia"][0]["url"]
-        }
-        list_of_stories.append(temp_dict)
+        try:
+            temp_dict = {
+                "title": value["title"],
+                "abstract": value["abstract"],
+                "url": value["url"],
+                "image_url": value["multimedia"][0]["url"]
+            }
+            list_of_stories.append(temp_dict)
+        except:
+            pass
     return list_of_stories
 
     
