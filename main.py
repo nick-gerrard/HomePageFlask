@@ -1,5 +1,6 @@
 import os
 from flask import Flask, Response, render_template, url_for, redirect, flash, request
+from forms import RegistrationForm, LoginForm
 import requests
 import datetime
 import lxml
@@ -40,6 +41,7 @@ def greeting(name):
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '37e1b18e528f342f7f510f04d8b00744'
 
 
 @app.route("/")
@@ -73,6 +75,25 @@ def home():
     return render_template('nick.html', weatherdata=weatherdata, links=links, greeting=greeting_type, 
                             trending_stories=trending_stories, open_time=open_time, 
                             weather_url = weather_url, notes=notes)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('home'))
+    return render_template('register.html', title="Register", form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == "nick" and form.password.data == "pass":
+            flash('Login Successful!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Login Failed. Check password/email!', 'danger')
+    return render_template('login.html', title="Login", form=form)
 
 @app.route('/news')
 def news():

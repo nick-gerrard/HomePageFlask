@@ -37,7 +37,7 @@
                 <h2 class="text-dark text-center">From the New York Times:</h2>
                 <ul class="list-group border border-light">
                     {% for story in trending_stories %}
-                    <li class="list-group-item text-dark bg-light border-light"><a href="{{ story['url'] }}" target=_blank class="btn btn-md btn-block btn-secondary text-light">{{ story['title'] }}</a>
+                    <li class="list-group-item text-dark bg-light border-light p-1"><a href="{{ story['url'] }}" target=_blank class="btn btn-md btn-block btn-secondary text-light">{{ story['title'] }}</a>
                     </li>
                     {% endfor %}
                 </ul>

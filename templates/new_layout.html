@@ -26,7 +26,7 @@
           <div class="navbar-nav">
             <a class="nav-item nav-link" href="{{ url_for('news') }}">News</a>
             <a class="nav-item nav-link" href="#">Notes</a>
-              <a class="nav-item nav-link" href="#">Login</a>
+              <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
           </div>
         </div>
       </nav>
@@ -35,7 +35,16 @@
         <h1 class="text-dark text-center pagination-centered">{{ greeting }}</h1>
         <p class="text-secondary-50 text-center">Page opened at {{ open_time }}</p>
         <div>
-                {% block content %}{% endblock %}
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% block content %}{% endblock %}
         </div>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
