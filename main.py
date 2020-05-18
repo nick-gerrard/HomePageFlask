@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import time
 import json
 import openweather
+import nyt
 
 
 news_url = "https://www.nytimes.com/sitemaps/new/news.xml.gz"
@@ -14,6 +15,9 @@ weather_url = "https://www.wunderground.com/hourly/us/va/arlington/22204"
 
 def get_weather():
     return openweather.get_arlington_weather(openweather.full_arlington_url)
+
+def get_news():
+    return nyt.get_stories(nyt.legitimate_url)
 
 def get_json_data(file):
     f = open(file)
@@ -34,15 +38,6 @@ def greeting(name):
         greet = "Good Evening, " + str(name)
         return greet
 
-    
-def get_trending(news_url):
-    trending = []
-    r = requests.get(news_url)
-    soup = BeautifulSoup(r.content, "lxml")
-    urls = soup.find_all("url")
-    for url in urls[0:5]:
-        trending.append((url.find("loc").get_text(), url.find("news:title").get_text()))
-    return trending
 
 app = Flask(__name__)
 
@@ -50,19 +45,33 @@ app = Flask(__name__)
 @app.route("/")
 @app.route("/nick")
 def nick():
+    # Name and Greeting
     name = "nick"
+    greeting_type = greeting(name.title())
+
+    # Favorite Links
     path_to_links = os.getcwd() + "/static/users/" + name + "/links.json"
     links = get_json_data(path_to_links)
+
+    # Fav Icons (beta)
+    path_to_favicons = os.getcwd() + "/static/users/" + name + "/favicons.json"
+    favicons = get_json_data(path_to_favicons)
+
+    # Notes
     path_to_notes = os.getcwd() + "/static/users/" + name + "/notes.json"
     notes = get_json_data(path_to_notes)
+
+    # Time
     unadjusted_time = datetime.datetime.now()
     adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
     open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
-    trending_stories = get_trending(news_url)
-    greeting_type = greeting(name.title())
+
+    # Data
+    trending_stories = get_news()[0:5]
     weatherdata = get_weather()
+
     return render_template('nick.html', weatherdata=weatherdata, links=links, greeting=greeting_type, 
-                            trending_stories=trending_stories, open_time=open_time, weather_url = weather_url, notes=notes)
+                            trending_stories=trending_stories, open_time=open_time, weather_url = weather_url, notes=notes, favicons=favicons)
 
 @app.route('/new_note')
 def new_note():

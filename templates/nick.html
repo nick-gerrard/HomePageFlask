@@ -22,6 +22,11 @@
                     {% for link in links %}
                     <a href="{{ links[link] }}" target=_blank class="btn btn-lg btn-secondary text-light m-1">{{ link }}</a>
                     {% endfor %}
+                    {% for favicon in favicons %}
+                    <a href="{{ favicon }}">
+                        <img src="/static/users/nick/fb32.png">
+                    </a>
+                    {% endfor %}
                 </div>
             </div>
         </div>        
@@ -32,7 +37,7 @@
                 <h2 class="text-dark text-center">From the New York Times:</h2>
                 <ul class="list-group border border-light">
                     {% for story in trending_stories %}
-                    <li class="list-group-item text-dark bg-light border-light"><a href="{{ story[0] }}" target=_blank class="btn btn-md btn-block btn-secondary text-light">{{ story[1] }}</a>
+                    <li class="list-group-item text-dark bg-light border-light"><a href="{{ story['url'] }}" target=_blank class="btn btn-md btn-block btn-secondary text-light">{{ story['title'] }}</a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -40,7 +45,7 @@
             <div class="col-sm-6">
                 <h2 class="text-dark text-center">Notes:</h2>
                 {% for note in notes %}
-                    <div class="card mt-3" style="">
+                    <div class="card mt-3">
                         <div class="card-body">
                             <h5 class="card-title">{{ note }}</h5>
                             <p class="card-text">{{ notes[note] }}</p>
