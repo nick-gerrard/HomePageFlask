@@ -1,0 +1,38 @@
+{% extends "new_layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-dark text-center align-center">From the New York Times:</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {% for story in trending_stories[0:10] %}
+            <div class="card mb-3" style="">
+                <img class="card-img-top" src="{{ story['image_url'] }}" alt="Image Not Available">
+                <div class="card-body">
+                <h5 class="card-title">{{ story["title"] }}</h5>
+                <p class="card-text"> {{ story["abstract"] }}</p>
+                <a href="{{ story['url'] }}" class="btn btn-secondary">View on NYT.com</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-6">
+            {% for story in trending_stories[10:20] %}
+            <div class="card" style="">
+                <img class="card-img-top" src="{{ story['image_url'] }}" alt="Image Not Available">
+                <div class="card-body">
+                <h5 class="card-title">{{ story["title"] }}</h5>
+                <p class="card-text"> {{ story["abstract"] }}</p>
+                <a href="{{ story['url'] }}" class="btn btn-secondary">View on NYT.com</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    
+ {% endblock content %}

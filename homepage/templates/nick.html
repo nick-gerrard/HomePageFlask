@@ -1,0 +1,60 @@
+{% extends "new_layout.html" %}
+{% block content %}
+    <div class="jumbotron text-center align-self-center bg-light text-dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card" class="align-center">
+                        <div class="card-header">
+                            <h1 class="text-dark">Weather in {{ current_user.zip_code }}</h1>
+                        </div>
+                        <div class="card-body">
+                            <p class="m-0">Temperature: {{ weatherdata["temp"] }}&#176; F</p>
+                            <p class="m-0">Feels Like: {{ weatherdata["feels_like"] }}&#176; F</p>
+                            <p class="m-0">High: {{ weatherdata["temp_max"] }}&#176; F</p>
+                            <p class="m-0">Low: {{ weatherdata["temp_min"] }}&#176; F</p>
+                            <p class="m-0">Conditions: {{ weatherdata["description"] }}</p>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-md-4 align-center">
+                    {% for link in links %}
+                    <a href="{{ link.address }}" target=_blank class="btn btn-lg btn-secondary text-light m-1">{{ link.title }}</a>
+                    {% endfor %}
+                    <!-- {% for favicon in favicons %}
+                    <a href="{{ favicon }}">
+                        <img src="/static/users/nick/fb32.png">
+                    </a>
+                    {% endfor %} -->
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2 class="text-dark text-center">From the New York Times:</h2>
+                <ul class="list-group border border-light">
+                    {% for story in trending_stories %}
+                    <li class="list-group-item text-dark bg-light border-light p-1"><a href="{{ story['url'] }}" target=_blank class="btn btn-md btn-block btn-secondary text-light">{{ story['title'] }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-sm-6">
+                <h2 class="text-dark text-center">Notes:</h2>
+                {% for note in notes %}
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ note.title }}</h5>
+                            <p class="card-text">{{ note.content }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <a href="{{ url_for('new_note') }}" target=_blank class="btn btn-lg btn-secondary text-light mt-3 btn-block">New Note</a>
+            </div>
+        </div>
+    </div>
+    
+ {% endblock content %}
