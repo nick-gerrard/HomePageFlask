@@ -59,3 +59,18 @@ class NewNoteForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Note Here", validators=[DataRequired()])
     submit = SubmitField("Save Note")
+
+class ChangeWeatherForm(FlaskForm):
+    zip_code = IntegerField("Zip Code", validators=[DataRequired()])
+    submit = SubmitField("Change Zip?")
+
+    def validate_zip_code(self, zip_code):
+        f = open(os.getcwd() + "/homepage/static/valid-zips.json")
+        data = json.load(f)
+        f.close()
+        print(zip_code.data)
+        if str(zip_code.data) in data:
+            print("Found zip code")
+            return
+        else:
+            raise ValidationError("That zip code is invalid. Please enter a valid 5 digit zip code.")

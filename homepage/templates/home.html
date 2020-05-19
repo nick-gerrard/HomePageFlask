@@ -31,7 +31,7 @@
             </div>
         </div>        
     </div>
-    <div class="container">
+    <div class="container pb-4">
         <div class="row">
             <div class="col-sm-6">
                 <h2 class="text-dark text-center">From the New York Times:</h2>
@@ -52,7 +52,16 @@
                         </div>
                     </div>
                 {% endfor %}
-                <a href="{{ url_for('new_note') }}" target=_blank class="btn btn-lg btn-secondary text-light mt-3 btn-block">New Note</a>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a href="{{ url_for('new_note') }}" class="btn btn-lg btn-secondary text-light mt-3 btn-block">New Note</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="{{ url_for('view_notes') }}" class="btn btn-lg btn-secondary text-light mt-3 btn-block">View Notes</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

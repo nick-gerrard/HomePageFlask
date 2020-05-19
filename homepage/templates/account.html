@@ -4,43 +4,21 @@
 <div class="container pb-4">
     <div class="row">
         <div class="col-sm-8">
-            <a href="{{ url_for('add_links') }}" target="" class="btn btn-lg btn-secondary text-light mt-3 btn-block">Add Links</a>
             <a href="{{ url_for('new_note') }}" target="" class="btn btn-lg btn-success text-light mt-3 btn-block">Add Note</a>
-            <a href="{{ url_for('view_notes') }}" target="" class="btn btn-lg btn-info text-light mt-3 btn-block">View Notes</a>
-            <a href="{{ url_for('change_weather') }}" target="" class="btn btn-lg btn-secondary text-light mt-3 btn-block">Change Weather Location</a>
+            <a href="{{ url_for('view_notes') }}" target="" class="btn btn-lg btn-success text-light mt-3 btn-block">View Notes</a>
 
             <!-- Button trigger modal -->
-            {% for link in current_user.links %}
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteModal">
-                Delete {{ link.title }}?
+            <button type="button" class="btn btn-lg btn-success text-light mt-3 btn-block" data-toggle="modal" data-target="#changeWeatherModal" data-whatever="Change Weather Location">
+                Change Weather Location?
             </button>
-            
-            
-            <!-- Modal -->
-            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Delete {{ link.title }}?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    <div class="modal-body">
-                    Clicking Delete will permanently remove this link form your HomePage
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <form action="{{ url_for('remove_link', link_id=link.id) }}" method="POST">
-                        <input class="btn btn-danger" type="submit" value="Delete">
-                    </form>
-                    </div>
-                </div>
-                </div>
-            </div>
-            {% endfor %}
+            <button type="button" class="btn btn-lg btn-success text-light mt-3 btn-block" data-toggle="modal" data-target="#addLinkModal" data-whatever="Add Links">
+                Add links to your homepage?
+            </button>
+            <button type="button" class="btn btn-lg btn-danger text-light mt-3 btn-block" data-toggle="modal" data-target="#deleteModal">
+                Delete  Link(s)?
+            </button>
+        </div> 
 
-        </div>
         <div class="col-sm-4">
             <div class="card mt-3">
                 <div class="card-body">
@@ -49,7 +27,118 @@
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
 </div>
+<!-- deleteModal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLongTitle">Delete Link(s)?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body pb-3 mb-3">
+        Clicking Delete will permanently remove this link form your HomePage
+        {% for link in current_user.links %}
+        <form action="{{ url_for('remove_link', link_id=link.id) }}" method="POST">
+            <input class="btn btn-danger mb-3 btn-block" type="submit" value="Delete {{ link.title }}">
+        </form>
+        {% endfor %}
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+    </div>
+</div>                
+<!-- AddLinkModal-->
+<div class="modal fade" id="addLinkModal" tabindex="-1" role="dialog" aria-labelledby="addLinkModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="addLinkModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form action="" method="POST">
+            {{ link_form.hidden_tag() }}
+            <div class="form-group">
+                {{ link_form.name.label(class="form-control-label") }}
+                {% if link_form.name.errors %}
+                    {{ link_form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in link_form.name.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ link_form.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ link_form.address.label(class="form-control-label") }}
+                {% if link_form.address.errors %}
+                    {{ link_form.address(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in link_form.address.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ link_form.address(class="form-control form-control-lg", placeholder="https://") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ link_form.submit(class="btn bg-dark text-light")}}
+            </div>
+        </form>
+    </div>
+    <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+    </div> -->
+    </div>
+</div>
+</div>
+<!-- changeWeatherModal -->
+<div class="modal fade" id="changeWeatherModal" tabindex="-1" role="dialog" aria-labelledby="changeWeatherModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeWeatherModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {{ weather_form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ weather_form.zip_code.label(class="form-control-label") }}
+                        {% if weather_form.zip_code.errors %}
+                            {{ weather_form.zip_code(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in weather_form.zip_code.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ weather_form.zip_code(class="form-control form-control-lg") }}
+                        {% endif %}
+                    <div class="form-group pt-3">
+                        {{ weather_form.submit(class="btn bg-dark text-light")}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            
    
 {% endblock content %}

@@ -4,7 +4,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from random import randint
 from bs4 import BeautifulSoup
 from homepage import app, db, bcrypt,  nyt, openweather
-from homepage.forms import RegistrationForm, LoginForm, LinkForm, DeleteLinkForm, NewNoteForm
+from homepage.forms import RegistrationForm, LoginForm, LinkForm, DeleteLinkForm, NewNoteForm, ChangeWeatherForm
 from homepage.models import User, Note, Link
 
 
@@ -82,9 +82,14 @@ def home():
     weather_url = openweather.get_full_url(current_user.zip_code)
     weatherdata = openweather.get_weather(weather_url)
 
-    return render_template('nick.html', weatherdata=weatherdata, links=links, greeting=greeting_type, 
+    return render_template('home.html', weatherdata=weatherdata, links=links, greeting=greeting_type, 
                             trending_stories=trending_stories, open_time=open_time, 
                             weather_url = weather_url, notes=notes)
+
+@app.route("/about")
+def about():
+    quote_tuple = generate_quote(os.getcwd() + "/homepage/static/quotes.json")
+    return render_template("about.html", title="About this site", quote_tuple=quote_tuple)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -125,26 +130,41 @@ def logout():
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
+    link_form = LinkForm()
+    weather_form = ChangeWeatherForm()
     quote_tuple = generate_quote(os.getcwd() + "/homepage/static/quotes.json")
-    
-    return render_template('account.html', title="Account", quote_tuple=quote_tuple)
-
-@app.route('/add_links', methods=['GET', 'POST'])
-@login_required
-def add_links():
-    form = LinkForm()
-    links = current_user.links
-    delete_form = DeleteLinkForm()
-    quote_tuple = generate_quote(os.getcwd() + "/homepage/static/quotes.json")
-    if form.validate_on_submit():
-        link = Link(title=form.name.data, address=form.address.data, user_id=current_user.id)
-        if check_address(form.address.data) == "VALID":
+    # Link Form Validation
+    if link_form.validate_on_submit():
+        link = Link(title=link_form.name.data, address=link_form.address.data, user_id=current_user.id)
+        if check_address(link_form.address.data) == "VALID":
             db.session.add(link)
             db.session.commit()
+            flash("Link Added", 'success')
             return redirect(url_for('account'))
         else:
             flash("Invalid URL - try again. Make sure to add \"https://\"", "danger")
-    return render_template('add_links.html', title="Account", form=form, delete_form=delete_form, links=links, quote_tuple=quote_tuple)
+        return redirect(url_for('account'))
+    
+    # Change Weather Form Validation
+    elif weather_form.validate_on_submit():
+        zip_code = str(weather_form.zip_code.data)
+        current_user.zip_code = zip_code
+        db.session.commit()
+        flash("Zip Code Updated", 'success')
+        return redirect(url_for('account'))
+
+    return render_template('account.html', title="Account", quote_tuple=quote_tuple, link_form=link_form, weather_form=weather_form)
+
+@app.route('/links/<int:user_id>/add', methods=['POST'])
+@login_required
+def add_link(user_id):
+    form = LinkForm()
+    if form.validate_on_submit():
+        link = Link(title=form.name.data, address=form.address.data, user_id=current_user.id)
+        db.session.add(link)
+        db.session.commit()
+        flash("Link Added", 'success')
+    return redirect(url_for('account'))
 
 @app.route('/links/<int:link_id>/delete', methods=['POST'])
 @login_required
@@ -192,7 +212,7 @@ def new_note():
 @login_required
 @app.route('/view_notes')
 def view_notes():
-    return(render_template('view_notes.html'))
+    return(render_template('view_notes.html', notes=current_user.notes))
 
 @login_required
 @app.route('/change_weather')

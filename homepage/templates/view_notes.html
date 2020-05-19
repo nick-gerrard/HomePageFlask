@@ -1,5 +1,16 @@
 {% extends "new_layout.html" %}
 {% block content %}
-    <h1>View Notes</h1>
+<h2 class="text-dark text-center">Notes:</h2>
+<div class="container pb-4">
+    {% for note in notes %}
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ note.title }}</h5>
+            <p class="card-text">{{ note.content }}</p>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
     
  {% endblock content %}
