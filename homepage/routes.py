@@ -179,7 +179,7 @@ def remove_link(link_id):
 
 @app.route('/news')
 def news():
-    name = "nick"
+    name = current_user.username
     greeting_type = greeting(name.title())
 
     unadjusted_time = datetime.datetime.now()
