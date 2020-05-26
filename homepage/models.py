@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     zip_code = db.Column(db.Integer, nullable=False)
     notes = db.relationship('Note', backref='author', lazy=True)
     links = db.relationship('Link', backref='author', lazy=True)
+    sent_messages = db.relationship('Message', backref="sender", lazy=True)
 
 
     def __repr__(self):
@@ -39,6 +40,14 @@ class Link(db.Model):
 
     def __repr__(self):
         return f"Link('{self.title}', '{self.address}'')"
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipient_id = db.Column(db.Integer, nullable=False)
+    subject = db.Column(db.String(120), nullable=False, default="Subject")
+    body = db.Column(db.Text, nullable=False)
 
 
 

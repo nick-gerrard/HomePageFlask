@@ -2,7 +2,8 @@ import requests, os, json
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from homepage.models import User, Link
+from homepage.models import User, Link, Message
+from homepage import db
 
 
 class RegistrationForm(FlaskForm):
@@ -36,8 +37,6 @@ class RegistrationForm(FlaskForm):
             return
         else:
             raise ValidationError("That zip code is invalid. Please enter a valid 5 digit zip code.")
-
-
 
 class LoginForm(FlaskForm):
     email =  StringField('Email',
@@ -74,3 +73,10 @@ class ChangeWeatherForm(FlaskForm):
             return
         else:
             raise ValidationError("That zip code is invalid. Please enter a valid 5 digit zip code.")
+
+
+class NewMessageForm(FlaskForm):
+    recipient = StringField("Username", validators=[DataRequired()])
+    subject = StringField("Subject", validators=[DataRequired()])
+    body = TextAreaField("Note Here", validators=[DataRequired()])
+    submit = SubmitField("Send Message")

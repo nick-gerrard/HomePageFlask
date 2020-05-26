@@ -1,0 +1,56 @@
+{% extends "new_layout.html" %}
+{% block content %}
+    <div class="container">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <row class="">
+                <div class="form-group">
+                    {{ form.recipient.label(class="form-control-label") }}
+                        {% if form.recipient.errors %}
+                            {{ form.recipient(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.recipient.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.recipient(class="form-control form-control-lg") }}
+                        {% endif %}
+                </div>
+            </row>
+            <row class="">
+                <div class="form-group">
+                    {{ form.subject.label(class="form-control-label") }}
+                        {% if form.subject.errors %}
+                            {{ form.subject(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.subject.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.subject(class="form-control form-control-lg") }}
+                        {% endif %}
+                </div>
+            </row>
+            <row class="">
+                <div class="form-group">
+                    {{ form.body.label(class="form-control-label") }}
+                        {% if form.body.errors %}
+                            {{ form.body(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.body.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.body(class="form-control form-control-lg") }}
+                        {% endif %}
+                </div>
+            </row>
+            <row>
+                {{ form.submit(class="btn bg-dark text-light")}}
+            </row>
+        </form>
+    </div>
+ {% endblock content %}

@@ -4,8 +4,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 from random import randint
 from bs4 import BeautifulSoup
 from homepage import app, db, bcrypt,  nyt, openweather
-from homepage.forms import RegistrationForm, LoginForm, LinkForm, DeleteLinkForm, NewNoteForm, ChangeWeatherForm
-from homepage.models import User, Note, Link
+from homepage.forms import RegistrationForm, LoginForm, LinkForm, DeleteLinkForm, NewNoteForm, \
+                        ChangeWeatherForm, NewMessageForm
+from homepage.models import User, Note, Link, Message
 
 
 weather_url = "https://www.wunderground.com/hourly/us/va/arlington/22204"
@@ -214,8 +215,29 @@ def new_note():
 def view_notes():
     return(render_template('view_notes.html', notes=current_user.notes))
 
-@login_required
-@app.route('/change_weather')
-def change_weather():
-    return(render_template('change_weather.html'))
 
+@login_required
+@app.route('/messages')
+def messages():
+    return render_template('viewmessages.html')
+
+@app.route('/new_message', methods=['GET', 'POST'])
+@login_required
+def new_message():
+    name = current_user.username
+    greeting_type = greeting(name.title())
+
+    unadjusted_time = datetime.datetime.now()
+    adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
+    open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
+
+    form = NewMessageForm()
+    if form.validate_on_submit():
+        recipient_id_number = User.query.filter_by(username=form.recipient.data).first().id
+        message = Message(sender_id=current_user.id, subject=form.subject.data, 
+                            body=form.body.data, sender=current_user, recipient_id=recipient_id_number)
+        db.session.add(message)
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template("new_message.html", greeting=greeting_type, open_time=open_time, 
+                            title="New Note", form=form)
