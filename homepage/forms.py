@@ -74,7 +74,6 @@ class ChangeWeatherForm(FlaskForm):
         else:
             raise ValidationError("That zip code is invalid. Please enter a valid 5 digit zip code.")
 
-
 class NewMessageForm(FlaskForm):
     recipient = StringField("Username", validators=[DataRequired()])
     subject = StringField("Subject", validators=[DataRequired()])

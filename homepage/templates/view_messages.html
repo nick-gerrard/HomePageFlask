@@ -1,0 +1,25 @@
+{% extends "new_layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-dark text-center align-center">Your Messages</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="">
+            {% for message in messages %}
+            <div class="card" style="">
+                <div class="card-body block">
+                <h5 class="card-title">{{ message.subject }}</h5>
+                <p class="card-text">{{ message.content }}</p>
+                <a href="{{ url_for('new_message') }}" class="btn btn-secondary">Reply</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    
+ {% endblock content %}

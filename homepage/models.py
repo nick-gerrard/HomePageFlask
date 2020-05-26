@@ -48,6 +48,14 @@ class Message(db.Model):
     recipient_id = db.Column(db.Integer, nullable=False)
     subject = db.Column(db.String(120), nullable=False, default="Subject")
     body = db.Column(db.Text, nullable=False)
+    time_sent = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
+
+    def __repr__(self):
+        return f"""Message(Sender: {User.query.get(self.sender_id).username}
+Recipient: {User.query.get(self.sender_id).username}
+Subject: {self.subject}
+Body: {self.body}
+"""
 
 
 

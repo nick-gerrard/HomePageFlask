@@ -48,8 +48,6 @@ def check_address(url):
     except:
         return "ERROR"
 
-
-
 @app.route("/")
 @app.route("/home")
 def home():
@@ -217,9 +215,18 @@ def view_notes():
 
 
 @login_required
-@app.route('/messages')
-def messages():
-    return render_template('viewmessages.html')
+@app.route('/view_messages')
+def view_messages():
+    message_list = []
+    user = User.query.get(current_user.id)
+    sent_messages = user.sent_messages
+    for message in sent_messages:
+        message_list.append(message)
+    for message in Message.query.filter_by(recipient_id=current_user.id):
+        message_list.append(message)
+    
+
+    return render_template('view_messages.html', messages=message_list)
 
 @app.route('/new_message', methods=['GET', 'POST'])
 @login_required
