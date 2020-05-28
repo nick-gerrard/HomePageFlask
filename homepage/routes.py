@@ -195,21 +195,13 @@ def news():
 @app.route('/new_note', methods=['GET', 'POST'])
 @login_required
 def new_note():
-    name = current_user.username
-    greeting_type = greeting(name.title())
-
-    unadjusted_time = datetime.datetime.now()
-    adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
-    open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
-
     form = NewNoteForm()
     if form.validate_on_submit():
         note = Note(title=form.title.data, content=form.content.data, author=current_user)
         db.session.add(note)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("new_note.html", greeting=greeting_type, open_time=open_time, 
-                            title="New Note", form=form)
+    return render_template("new_note.html", title="New Note", form=form)
 
 @login_required
 @app.route('/notes')
@@ -264,17 +256,12 @@ def view_messages():
 @app.route('/new_message', methods=['GET', 'POST'])
 @login_required
 def new_message():
-    name = current_user.username
-    greeting_type = greeting(name.title())
-
-    unadjusted_time = datetime.datetime.now()
-    adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
-    open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
     form = NewMessageForm()
-    
+    print(form.recipient.data, type(form.recipient.data))   
     if form.validate_on_submit():
         print("validated")
-        recipient_username = coerce_recipient_username(form.recipient.data)
+        recipient_username = form.recipient.data
+        #recipient_username = coerce_recipient_username(form.recipient.data)
         print(recipient_username)
         recipient_id_number = User.query.filter_by(username=recipient_username).first().id
         message = Message(sender_id=current_user.id, subject=form.subject.data, 
@@ -282,8 +269,7 @@ def new_message():
         db.session.add(message)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("new_message.html", greeting=greeting_type, open_time=open_time, 
-                            title="New Note", form=form)
+    return render_template("new_message.html", title="New Note", form=form)
 
 @login_required
 @app.route('/messages/<int:message_id>/')
