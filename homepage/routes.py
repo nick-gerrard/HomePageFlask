@@ -22,17 +22,7 @@ def get_json_data(file):
     return data
 
 def greeting(name):
-    full_time = datetime.datetime.now() - datetime.timedelta(hours=4)
-    hour = full_time.hour
-    if hour < 12:
-        greet = "Good Morning, " + str(name)
-        return greet
-    elif hour < 17:
-        greet = "Good Afternoon, " + str(name)
-        return greet
-    else:
-        greet = "Good Evening, " + str(name)
-        return greet
+    return "Hello, " + name
 
 def generate_quote(quote_json):
     quote_list = get_json_data(quote_json)["quotes"]
@@ -47,6 +37,12 @@ def check_address(url):
         return "VALID"
     except:
         return "ERROR"
+
+def coerce_recipient_username(recipient_data):
+    x = recipient_data.split("'")
+    return x[1]
+
+
 
 @app.route("/")
 @app.route("/home")
@@ -80,6 +76,13 @@ def home():
     trending_stories = get_news()[0:5]
     weather_url = openweather.get_full_url(current_user.zip_code)
     weatherdata = openweather.get_weather(weather_url)
+
+    # Unread Messages
+    messages = Message.query.filter_by(recipient_id=current_user.id)
+    for message in messages:
+        if message.unread == True:
+            flash("You have unread messages", "info")
+            break
 
     return render_template('home.html', weatherdata=weatherdata, links=links, greeting=greeting_type, 
                             trending_stories=trending_stories, open_time=open_time, 
@@ -209,10 +212,38 @@ def new_note():
                             title="New Note", form=form)
 
 @login_required
-@app.route('/view_notes')
+@app.route('/notes')
 def view_notes():
-    return(render_template('view_notes.html', notes=current_user.notes))
+    return(render_template('notes.html', notes=current_user.notes))
 
+@login_required
+@app.route("/notes/<int:note_id>", methods=['GET', 'POST'])
+def edit_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if current_user.id != note.user_id:
+        abort(403)
+    form = NewNoteForm()
+    if form.validate_on_submit():
+        note.content = form.content.data
+        note.title = form.title.data
+        db.session.commit()
+        flash("Your Note has been Updated", "success")
+        return redirect(url_for('view_notes'))
+    elif request.method == 'GET':
+        form.title.data = note.title
+        form.content.data = note.content
+    return render_template('edit_note.html', title=note.title, note=note, form=form)
+
+@login_required
+@app.route('/notes/<int:note_id>/delete', methods=['POST'])
+def delete_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if current_user.id != note.user_id:
+        abort(403)
+    db.session.delete(note)
+    db.session.commit()
+    flash('Your Note has been deleted!', 'info')
+    return redirect(url_for('home'))
 
 @login_required
 @app.route('/view_messages')
@@ -221,11 +252,13 @@ def view_messages():
     user = User.query.get(current_user.id)
     sent_messages = user.sent_messages
     for message in sent_messages:
-        message_list.append(message)
+        sender = current_user.username
+        message_list.append((message, sender))
     for message in Message.query.filter_by(recipient_id=current_user.id):
-        message_list.append(message)
-    
-
+        message.unread = False
+        db.session.commit()
+        sender = User.query.get(message.sender_id).username
+        message_list.append((message, sender))
     return render_template('view_messages.html', messages=message_list)
 
 @app.route('/new_message', methods=['GET', 'POST'])
@@ -237,10 +270,13 @@ def new_message():
     unadjusted_time = datetime.datetime.now()
     adjusted_time = unadjusted_time - datetime.timedelta(hours=4)
     open_time = adjusted_time.strftime("%Y.%m.%d|%H:%M:%S")
-
     form = NewMessageForm()
+    
     if form.validate_on_submit():
-        recipient_id_number = User.query.filter_by(username=form.recipient.data).first().id
+        print("validated")
+        recipient_username = coerce_recipient_username(form.recipient.data)
+        print(recipient_username)
+        recipient_id_number = User.query.filter_by(username=recipient_username).first().id
         message = Message(sender_id=current_user.id, subject=form.subject.data, 
                             body=form.body.data, sender=current_user, recipient_id=recipient_id_number)
         db.session.add(message)
@@ -248,3 +284,13 @@ def new_message():
         return redirect(url_for("home"))
     return render_template("new_message.html", greeting=greeting_type, open_time=open_time, 
                             title="New Note", form=form)
+
+@login_required
+@app.route('/messages/<int:message_id>/')
+def view_message(message_id):
+    message = Message.query.get_or_404(message_id)
+    print(message.recipient_id, current_user.id)
+    if current_user.id != message.recipient_id and current_user.id != message.sender_id:
+        abort(403)
+    sender = User.query.get(message.sender_id).username
+    return render_template('message.html', message=message, sender=sender)

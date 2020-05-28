@@ -5,6 +5,8 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from homepage.models import User, Link, Message
 from homepage import db
 
+def generate_user_list():
+    return [(user.username, user.username) for user in User.query.all()]
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', 
@@ -75,7 +77,9 @@ class ChangeWeatherForm(FlaskForm):
             raise ValidationError("That zip code is invalid. Please enter a valid 5 digit zip code.")
 
 class NewMessageForm(FlaskForm):
-    recipient = StringField("Username", validators=[DataRequired()])
+    recipient = SelectField("Send To:", choices=generate_user_list(), validators=[DataRequired()])
     subject = StringField("Subject", validators=[DataRequired()])
-    body = TextAreaField("Note Here", validators=[DataRequired()])
+    body = TextAreaField("Body", validators=[DataRequired()])
     submit = SubmitField("Send Message")
+
+

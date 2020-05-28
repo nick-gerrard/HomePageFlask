@@ -7,17 +7,22 @@
         </div>
     </div>
     <div class="row">
-        <div class="">
+        <div class="col-sm-12">
             {% for message in messages %}
-            <div class="card" style="">
+            <div class="card text-center">
                 <div class="card-body block">
-                <h5 class="card-title">{{ message.subject }}</h5>
-                <p class="card-text">{{ message.content }}</p>
+                <h5 class="card-title">{{ message[0].subject }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Sender: {{ message[1] }}</h6>
+                <p class="card-text">{{ message[0].content }}</p>
+                <a href="{{ url_for('view_message', message_id=message[0].id) }}" class="btn btn-secondary">View</a>
                 <a href="{{ url_for('new_message') }}" class="btn btn-secondary">Reply</a>
                 </div>
             </div>
             {% endfor %}
         </div>
+    </div>
+    <div class="row pt-3">
+        <a href="{{ url_for('new_message') }}" class="btn btn-secondary">Send New Message</a>
     </div>
 </div>
 

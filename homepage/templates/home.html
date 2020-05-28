@@ -22,6 +22,8 @@
                     {% for link in links %}
                     <a href="{{ link.address }}" target=_blank class="btn btn-lg btn-secondary text-light m-1">{{ link.title }}</a>
                     {% endfor %}
+                    <a href="{{ url_for('account') }}" target=_blank class="btn btn-lg btn-info text-light m-1">Add Links?</a>
+
                     <!-- {% for favicon in favicons %}
                     <a href="{{ favicon }}">
                         <img src="/static/users/nick/fb32.png">

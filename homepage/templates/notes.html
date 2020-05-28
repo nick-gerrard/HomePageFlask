@@ -7,6 +7,8 @@
         <div class="card-body">
             <h5 class="card-title">{{ note.title }}</h5>
             <p class="card-text">{{ note.content }}</p>
+            <a href="{{ url_for('edit_note', note_id=note.id) }}" class="card-link">View/Edit Note</a>
+
         </div>
     </div>
 {% endfor %}

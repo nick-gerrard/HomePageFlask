@@ -5,6 +5,9 @@
             {{ form.hidden_tag() }}
             <row class="">
                 <div class="form-group">
+                    <!-- {{ form.recipient.label(class="form-control-label") }}
+                    {{ form.recipient(class="form-control form-control-lg") }} -->
+
                     {{ form.recipient.label(class="form-control-label") }}
                         {% if form.recipient.errors %}
                             {{ form.recipient(class="form-control form-control-lg is-invalid") }}
