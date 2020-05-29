@@ -16,3 +16,4 @@ def check_address(url):
         return "VALID"
     except:
         return "ERROR"
+

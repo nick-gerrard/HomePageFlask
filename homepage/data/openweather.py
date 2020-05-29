@@ -3,12 +3,18 @@ import requests, json
 # URL: http://api.openweathermap.org/data/2.5/weather?zip={zip code},{country code}&appid={your api key}
 
 
-api_key = "c9feaa1db7664788e7a117ca3aee9af3"
+
 base_url = "http://api.openweathermap.org/data/2.5/weather?zip="
 #url WHOLE api.openweathermap.org/data/2.5/weather?id={city id}&appid={your api key}
 # http://api.openweathermap.org/data/2.5/weather?id=4744725&appid=c9feaa1db7664788e7a117ca3aee9af3
 
+def get_json_data(file):
+    f = open(file)
+    data = json.load(f)
+    f.close()
+    return data
 
+api_key = get_json_data('/configs/HomePageConfigsAPIKeys.json')['OPEN_WEATHER_API_KEY']
 def get_full_url(zip):
     full_url = base_url + str(zip) + "&appid=" + api_key
     return full_url
