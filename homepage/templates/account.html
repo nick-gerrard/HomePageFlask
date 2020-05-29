@@ -4,8 +4,8 @@
 <div class="container pb-4">
     <div class="row">
         <div class="col-sm-8">
-            <a href="{{ url_for('new_note') }}" target="" class="btn btn-lg btn-success text-light mt-3 btn-block">Add Note</a>
-            <a href="{{ url_for('view_notes') }}" target="" class="btn btn-lg btn-success text-light mt-3 btn-block">View Notes</a>
+            <a href="{{ url_for('notes.new_note') }}" target="" class="btn btn-lg btn-success text-light mt-3 btn-block">Add Note</a>
+            <a href="{{ url_for('notes.view_notes') }}" target="" class="btn btn-lg btn-success text-light mt-3 btn-block">View Notes</a>
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-lg btn-success text-light mt-3 btn-block" data-toggle="modal" data-target="#changeWeatherModal" data-whatever="Change Weather Location">
@@ -42,7 +42,7 @@
         <div class="modal-body pb-3 mb-3">
         Clicking Delete will permanently remove this link form your HomePage
         {% for link in current_user.links %}
-        <form action="{{ url_for('remove_link', link_id=link.id) }}" method="POST">
+        <form action="{{ url_for('users.remove_link', link_id=link.id) }}" method="POST">
             <input class="btn btn-danger mb-3 btn-block" type="submit" value="Delete {{ link.title }}">
         </form>
         {% endfor %}

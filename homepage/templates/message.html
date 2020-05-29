@@ -8,7 +8,7 @@
             <h6 class="card-subtitle mb-2 text-muted">Sent by: {{ sender }}</h6>
             <h6 class="card-subtitle mb-2 text-muted">Time Sent: {{ message.time_send }}</h6>
             <p class="card-text">{{ message.content }}</p>
-            <a href="{{ url_for('new_message') }}" class="btn btn-secondary">Reply</a>
+            <a href="{{ url_for('messages.new_message') }}" class="btn btn-secondary">Reply</a>
 
         </div>
     </div>

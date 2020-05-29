@@ -22,7 +22,7 @@
                     {% for link in links %}
                     <a href="{{ link.address }}" target=_blank class="btn btn-lg btn-secondary text-light m-1">{{ link.title }}</a>
                     {% endfor %}
-                    <a href="{{ url_for('account') }}" target=_blank class="btn btn-lg btn-info text-light m-1">Add Links?</a>
+                    <a href="{{ url_for('users.account') }}" target=_blank class="btn btn-lg btn-info text-light m-1">Add Links?</a>
 
                     <!-- {% for favicon in favicons %}
                     <a href="{{ favicon }}">
@@ -57,10 +57,10 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-6">
-                            <a href="{{ url_for('new_note') }}" class="btn btn-lg btn-secondary text-light mt-3 btn-block">New Note</a>
+                            <a href="{{ url_for('notes.new_note') }}" class="btn btn-lg btn-secondary text-light mt-3 btn-block">New Note</a>
                         </div>
                         <div class="col-sm-6">
-                            <a href="{{ url_for('view_notes') }}" class="btn btn-lg btn-secondary text-light mt-3 btn-block">View Notes</a>
+                            <a href="{{ url_for('notes.view_notes') }}" class="btn btn-lg btn-secondary text-light mt-3 btn-block">View Notes</a>
                         </div>
                     </div>
                 </div>
