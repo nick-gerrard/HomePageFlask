@@ -22,12 +22,14 @@ def view_messages():
     sent_messages = user.sent_messages
     for message in sent_messages:
         sender = current_user.username
-        message_list.append((message, sender))
+        recipient = User.query.get(message.recipient_id).username
+        message_list.append((message, sender, recipient))
     for message in Message.query.filter_by(recipient_id=current_user.id):
         message.unread = False
         db.session.commit()
         sender = User.query.get(message.sender_id).username
-        message_list.append((message, sender))
+        recipient = current_user.username
+        message_list.append((message, sender, recipient))
     return render_template('view_messages.html', messages=message_list)
 
 @messages.route('/new_message', methods=['GET', 'POST'])
@@ -50,8 +52,9 @@ def new_message():
 @messages.route('/messages/<int:message_id>/')
 def view_message(message_id):
     message = Message.query.get_or_404(message_id)
-    print(message.recipient_id, current_user.id)
     if current_user.id != message.recipient_id and current_user.id != message.sender_id:
         abort(403)
     sender = User.query.get(message.sender_id).username
-    return render_template('message.html', message=message, sender=sender)
+    recipient = User.query.get(message.recipient_id).username
+
+    return render_template('message.html', message=message, sender=sender, recipient=recipient)

@@ -124,3 +124,14 @@ def reset_token(token):
         return redirect(url_for('users.login'))
 
     return render_template("reset_token.html", quote_tuple=quote_tuple, title="Reset Password", form=form)
+
+@users.route('/account/link<int:link_id>/delete', methods=['POST'])
+@login_required
+def remove_link(link_id):
+    link = Link.query.get_or_404(link_id)
+    if link.author != current_user:
+        abort(403)
+    db.session.delete(link)
+    db.session.commit()
+    flash("Link Deleted", 'success')
+    return redirect(url_for('account'))
