@@ -80,7 +80,7 @@ def account():
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = ExternalMessage('Password Reset Request',
-                sender='noreply@HomePagePasswordReset.com', \
+                sender='ngerrard.pythondevelopment@gmail.com', \
                 recipients=[user.email])
     msg.body = f"""To reset your password, visit the following link:
 {url_for('users.reset_token', token=token, _external=True)}
