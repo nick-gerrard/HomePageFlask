@@ -1,5 +1,5 @@
 from flask import Blueprint
-
+from datetime import datetime
 from flask import Flask, Response, render_template, url_for, redirect, flash, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message as ExternalMessage
@@ -30,7 +30,12 @@ def view_messages():
         sender = User.query.get(message.sender_id).username
         recipient = current_user.username
         message_list.append((message, sender, recipient))
-    return render_template('view_messages.html', messages=message_list)
+
+    sorted_message_list = sorted(
+        message_list,
+        key=lambda x: datetime.strptime(x[0].time_sent.strftime('%m/%d/%Y/%H'), '%m/%d/%Y/%H'), reverse=True
+    )
+    return render_template('view_messages.html', messages=sorted_message_list)
 
 @messages.route('/new_message', methods=['GET', 'POST'])
 @login_required
