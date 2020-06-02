@@ -18,13 +18,13 @@ messages = Blueprint('messages', __name__)
 @messages.route('/view_messages')
 def view_messages():
     message_list = []
-    user = User.query.get(current_user.id)
+    user = User.query.order_by(Message.time_sent.desc()).get(current_user.id)
     sent_messages = user.sent_messages
     for message in sent_messages:
         sender = current_user.username
         recipient = User.query.get(message.recipient_id).username
         message_list.append((message, sender, recipient))
-    for message in Message.query.filter_by(recipient_id=current_user.id):
+    for message in Message.query.order_by(Message.time_sent.desc()).filter_by(recipient_id=current_user.id):
         message.unread = False
         db.session.commit()
         sender = User.query.get(message.sender_id).username

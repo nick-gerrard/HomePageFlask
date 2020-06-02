@@ -4,11 +4,11 @@
 <div class="container pb-4">
     <div class="card mt-3">
         <div class="card-body">
-            <h5 class="card-title">{{ message.subject }}</h5>
+            <h5 class="card-title"><strong>Subject:    </strong>{{ message.subject }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Sent by: {{ sender }}</h6>
             <h6 class="card-subtitle mb-2 text-muted">Received by: {{ recipient }}</h6>
-            <!-- <h6 class="card-subtitle mb-2 text-muted">Time Sent: {{ message.time_sent }}</h6> -->
-            <p class="card-text">{{ message.content }}</p>
+            <h6 class="card-subtitle mb-2 text-muted">Time Sent: {{ message.time_sent.strftime('%Y-%m-%d') }}</h6>
+            <p class="card-text"><strong>Body:    </strong>{{ message.body }}</p>
             <a href="{{ url_for('messages.new_message') }}" class="btn btn-secondary">Reply</a>
 
         </div>
