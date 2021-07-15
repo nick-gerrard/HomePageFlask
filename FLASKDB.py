@@ -14,6 +14,19 @@ def change_user_password(user, password):
     else:
         print("Aborting password change")
 
+#Function to add link to user
+def add_link(title, url, user):
+    check = input(f"""Is this the link you want to add? Title: {title},
+            URL: {url},
+            user = {user.username}?
+            Type Y to continue. """)
+    if check == "Y":
+        link = Link(title=title, address=url, user_id=user.id)
+        db.session.add(link)
+        db.session.commit()
+        print(f"Success! {title} has been added to {user.username}'s homepage!")
+    else:
+        print("Failure. Aborting...")
 # Pushing the context to be able to query the database:\
 app = create_app()
 app.app_context().push()
